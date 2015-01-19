@@ -33,8 +33,6 @@ int main() {
 	sqlite3 *db;
 	int res = sqlite3_open("/home/zaqc/mydb", &db);
 
-	//sqlite3_stmt * stmt;
-
 	sqlite3_exec(db, "select * from Trip", &cb, NULL, NULL);
 
 	cout << "!!!Hello World!!! res=" << res << endl;

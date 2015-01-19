@@ -43,13 +43,41 @@ public:
 };
 //----------------------------------------------------------------------------
 
-struct DataFileHeader{
+struct DataFileHeader {
 	char m_Header[3];
 	char m_Version[5];
 	__int32_t m_HardwareID;
 	__int32_t m_TripID;
 	__int32_t m_SessionID;
 	time_t m_DataTime;
+
+	__int64_t m_TripEdge;
+	char m_TripCaption[128];
+};
+//----------------------------------------------------------------------------
+
+struct TripPoint {
+	__int32_t m_DirectionID;
+	__int32_t m_WayID;
+	__int32_t m_Km;
+	__int32_t m_M;
+	__int32_t m_StationID;
+	__int32_t m_Switcher;
+};
+//----------------------------------------------------------------------------
+
+class TripPointIndex {
+protected:
+	std::vector<TripPoint> m_TripEdge;
+public:
+};
+//----------------------------------------------------------------------------
+
+struct CorrectionMarker {
+	TripPoint m_TripPoint;	// Точка на маршруте
+	__int32_t m_IncDec;		// На увеличение = 1
+	__int32_t m_ROR;		// Правая справа = 1
+	__int32_t m_Cot;		// Котлом=1
 };
 //----------------------------------------------------------------------------
 
@@ -61,6 +89,7 @@ public:
 	DataFile();
 	virtual ~DataFile();
 
+	void Create(void);
 	void Open(void);
 	void Close(void);
 
