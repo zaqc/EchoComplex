@@ -17,35 +17,9 @@
 namespace usm {
 
 //============================================================================
-//	DataBlock
-//============================================================================
-void DataBlock::Write(FILE *aFile) {
-	fwrite(&m_FilePos, sizeof(__int64_t ), 1, aFile);
-	fwrite(&m_RealSize, sizeof(__int32_t ), 1, aFile);
-	fwrite(&m_ZippedSize, sizeof(__int32_t ), 1, aFile);
-	fwrite(&m_Position, sizeof(__int32_t ), 1, aFile);
-	fwrite(&m_FrameCount, sizeof(__int32_t ), 1, aFile);
-}
-//----------------------------------------------------------------------------
-
-void DataBlock::Read(FILE *aFile) {
-	fread(&m_FilePos, sizeof(__int64_t ), 1, aFile);
-	fread(&m_RealSize, sizeof(__int32_t ), 1, aFile);
-	fread(&m_ZippedSize, sizeof(__int32_t ), 1, aFile);
-	fread(&m_Position, sizeof(__int32_t ), 1, aFile);
-	fread(&m_FrameCount, sizeof(__int32_t ), 1, aFile);
-}
-//----------------------------------------------------------------------------
-
-bool DataBlock::PositionInBlock(int aFrame) {
-	return aFrame >= m_Position && aFrame < m_Position + m_FrameCount;
-}
-//----------------------------------------------------------------------------
-
-//============================================================================
 //	DataBlockIndex
 //============================================================================
-DataBlockIndex::DataBlockIndex() :
+DataFileIndex::DataFileIndex() :
 		m_Lock() {
 	m_FrameCount = 0;
 	time_t t;
@@ -55,16 +29,20 @@ DataBlockIndex::DataBlockIndex() :
 }
 //----------------------------------------------------------------------------
 
-DataBlockIndex::~DataBlockIndex() {
+DataFileIndex::~DataFileIndex() {
 }
 //----------------------------------------------------------------------------
 
-void DataBlockIndex::Add(DataBlock *aDB) {
-
+void DataFileIndex::AddDataBlock(DataBlock *aDB) {
+	m_Lock.Lock();
+	aDB->m_Position = m_FrameCount;
+	m_DataBlock.push_back(aDB);
+	m_FrameCount += aDB->m_FrameCount;
+	m_Lock.Unlock();
 }
 //----------------------------------------------------------------------------
 
-DataBlock * DataBlockIndex::FindDataBlock(int aFrame) {
+DataBlock * DataFileIndex::FindDataBlock(int aFrame) {
 
 	DataBlock *ret = NULL;
 	m_Lock.Lock();
