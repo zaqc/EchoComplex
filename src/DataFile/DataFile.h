@@ -43,6 +43,16 @@ public:
 };
 //----------------------------------------------------------------------------
 
+struct DataFileHeader{
+	char m_Header[3];
+	char m_Version[5];
+	__int32_t m_HardwareID;
+	__int32_t m_TripID;
+	__int32_t m_SessionID;
+	time_t m_DataTime;
+};
+//----------------------------------------------------------------------------
+
 class DataFile {
 protected:
 	FILE *m_File;

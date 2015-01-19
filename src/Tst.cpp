@@ -15,10 +15,31 @@
 #include "Client/ClientSocket.h"
 #include "DataFile/DataFile.h"
 
+#include <sqlite3.h>
+
 using namespace std;
 
+int cb(void *a, int b, char **c, char **d) {
+
+	for(int i = 0; i < b; i++){
+		cout << " c[i]=" << c[i] << " d[i]=" << d[i] << endl;
+	}
+
+	return 0;
+}
+
 int main() {
-	cout << "!!!Hello World!!!" << endl;
+
+	sqlite3 *db;
+	int res = sqlite3_open("/home/zaqc/mydb", &db);
+
+	//sqlite3_stmt * stmt;
+
+	sqlite3_exec(db, "select * from Trip", &cb, NULL, NULL);
+
+	cout << "!!!Hello World!!! res=" << res << endl;
+
+	sqlite3_close(db);
 
 	usm::DataFile df;
 

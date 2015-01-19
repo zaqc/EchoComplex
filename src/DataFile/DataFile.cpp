@@ -6,11 +6,12 @@
  */
 
 #include "DataFile.h"
+#include "../Util/XThread.h"
 #include <iostream>
 #include <stdio.h>
 #include <string.h>
 #include <string>
-#include "../Util/XThread.h"
+#include <time.h>
 //----------------------------------------------------------------------------
 
 namespace usm {
@@ -47,6 +48,10 @@ bool DataBlock::PositionInBlock(int aFrame) {
 DataBlockIndex::DataBlockIndex() :
 		m_Lock() {
 	m_FrameCount = 0;
+	time_t t;
+	time(&t);
+	tm *lt = localtime(&t);
+	std::cout << asctime(lt) << std::endl;
 }
 //----------------------------------------------------------------------------
 
