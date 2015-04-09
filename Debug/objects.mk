@@ -4,5 +4,5 @@
 
 USER_OBJS := /usr/local/lib/libsqlite3.so
 
-LIBS :=
+LIBS := -lxerces-c
 
